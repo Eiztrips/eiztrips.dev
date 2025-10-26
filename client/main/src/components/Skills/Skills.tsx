@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import './Skills.scss';
+import { useI18n } from '../../i18n/i18n';
 
 interface Skill {
     name: string;
@@ -10,6 +11,8 @@ interface Skill {
 }
 
 const Skills: React.FC = () => {
+    const { t } = useI18n();
+
     const skills: Skill[] = [
         { name: 'Python', icon: '🐍', level: 90, category: 'Backend' },
         { name: 'FastAPI', icon: '⚡', level: 85, category: 'Backend' },
@@ -56,9 +59,9 @@ const Skills: React.FC = () => {
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
                 >
-                    <h2 className="section-title">Tech Stack</h2>
+                    <h2 className="section-title">{t('skills.title')}</h2>
                     <p className="section-description">
-                        Technologies and tools I use to bring ideas to life
+                        {t('skills.description')}
                     </p>
                 </motion.div>
 
@@ -117,16 +120,16 @@ const Skills: React.FC = () => {
                     transition={{ delay: 0.3 }}
                 >
                     <div className="info-card">
-                        <h4>🚀 Always Learning</h4>
-                        <p>Continuously expanding my knowledge in distributed systems, microservices, and cloud technologies</p>
+                        <h4>{t('skills.additional.info1.title')}</h4>
+                        <p>{t('skills.additional.info1.text')}</p>
                     </div>
                     <div className="info-card">
-                        <h4>💡 Problem Solver</h4>
-                        <p>Passionate about writing clean, maintainable code and solving complex technical challenges</p>
+                        <h4>{t('skills.additional.info2.title')}</h4>
+                        <p>{t('skills.additional.info2.text')}</p>
                     </div>
                     <div className="info-card">
-                        <h4>🤝 Team Player</h4>
-                        <p>Experience in collaborative development and agile methodologies</p>
+                        <h4>{t('skills.additional.info3.title')}</h4>
+                        <p>{t('skills.additional.info3.text')}</p>
                     </div>
                 </motion.div>
             </div>
@@ -135,4 +138,3 @@ const Skills: React.FC = () => {
 };
 
 export default Skills;
-

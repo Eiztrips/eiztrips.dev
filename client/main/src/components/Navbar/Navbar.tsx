@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Navbar.scss';
+import { useI18n } from '../../i18n/i18n';
 
 const Navbar: React.FC = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [theme, setTheme] = useState<'light' | 'dark'>('light');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    const { t, locale, setLocale } = useI18n();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -25,11 +28,11 @@ const Navbar: React.FC = () => {
     };
 
     const menuItems = [
-        { name: 'Home', href: '#hero' },
-        { name: 'About', href: '#about' },
-        { name: 'Skills', href: '#skills' },
-        { name: 'Projects', href: '#projects' },
-        { name: 'Contact', href: '#contact' },
+        { name: t('navbar.home'), href: '#hero' },
+        { name: t('navbar.about'), href: '#about' },
+        { name: t('navbar.skills'), href: '#skills' },
+        { name: t('navbar.projects'), href: '#projects' },
+        { name: t('navbar.contact'), href: '#contact' },
     ];
 
     return (
@@ -46,7 +49,7 @@ const Navbar: React.FC = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                 >
-                    <span className="logo-text">Eiztrips</span>
+                    <span className="logo-text">{t('navbar.logo')}</span>
                 </motion.a>
 
                 {/* Desktop Menu */}
@@ -75,6 +78,21 @@ const Navbar: React.FC = () => {
                     >
                         {theme === 'light' ? '🌙' : '☀️'}
                     </motion.button>
+
+                    <div className="lang-toggle">
+                        <button
+                            className={`lang-btn ${locale === 'en' ? 'active' : ''}`}
+                            onClick={() => setLocale('en')}
+                        >
+                            EN
+                        </button>
+                        <button
+                            className={`lang-btn ${locale === 'ru' ? 'active' : ''}`}
+                            onClick={() => setLocale('ru')}
+                        >
+                            RU
+                        </button>
+                    </div>
 
                     <button
                         className="mobile-menu-toggle"
@@ -122,4 +140,3 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
-

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import './Contact.scss';
+import { useI18n } from '../../i18n/i18n';
 
 const Contact: React.FC = () => {
+    const { t } = useI18n();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -45,9 +47,9 @@ const Contact: React.FC = () => {
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
                 >
-                    <h2 className="section-title">Get In Touch</h2>
+                    <h2 className="section-title">{t('contact.title')}</h2>
                     <p className="section-description">
-                        Have a project in mind? Let's work together!
+                        {t('contact.description')}
                     </p>
                 </motion.div>
 
@@ -61,13 +63,13 @@ const Contact: React.FC = () => {
                     >
                         <div className="info-card">
                             <div className="info-icon">📧</div>
-                            <h3>Email</h3>
+                            <h3>{t('contact.email')}</h3>
                             <a href="mailto:contact@eiztrips.dev">contact@eiztrips.dev</a>
                         </div>
 
                         <div className="info-card">
                             <div className="info-icon">💼</div>
-                            <h3>LinkedIn</h3>
+                            <h3>{t('contact.linkedin')}</h3>
                             <a href="https://linkedin.com/in/eiztrips" target="_blank" rel="noopener noreferrer">
                                 linkedin.com/in/eiztrips
                             </a>
@@ -75,7 +77,7 @@ const Contact: React.FC = () => {
 
                         <div className="info-card">
                             <div className="info-icon">🐙</div>
-                            <h3>GitHub</h3>
+                            <h3>{t('contact.github')}</h3>
                             <a href="https://github.com/eiztrips" target="_blank" rel="noopener noreferrer">
                                 github.com/eiztrips
                             </a>
@@ -83,8 +85,8 @@ const Contact: React.FC = () => {
 
                         <div className="info-card">
                             <div className="info-icon">📍</div>
-                            <h3>Location</h3>
-                            <p>Available for remote work</p>
+                            <h3>{t('contact.location')}</h3>
+                            <p>{t('contact.location')}</p>
                         </div>
                     </motion.div>
 
@@ -97,7 +99,7 @@ const Contact: React.FC = () => {
                         transition={{ duration: 0.6 }}
                     >
                         <div className="form-group">
-                            <label htmlFor="name">Name</label>
+                            <label htmlFor="name">{t('contact.form.name')}</label>
                             <input
                                 type="text"
                                 id="name"
@@ -105,12 +107,12 @@ const Contact: React.FC = () => {
                                 value={formData.name}
                                 onChange={handleChange}
                                 required
-                                placeholder="Your Name"
+                                placeholder={t('contact.form.namePlaceholder')}
                             />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="email">Email</label>
+                            <label htmlFor="email">{t('contact.form.email')}</label>
                             <input
                                 type="email"
                                 id="email"
@@ -118,12 +120,12 @@ const Contact: React.FC = () => {
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
-                                placeholder="your.email@example.com"
+                                placeholder={t('contact.form.emailPlaceholder')}
                             />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="message">Message</label>
+                            <label htmlFor="message">{t('contact.form.message')}</label>
                             <textarea
                                 id="message"
                                 name="message"
@@ -131,7 +133,7 @@ const Contact: React.FC = () => {
                                 onChange={handleChange}
                                 required
                                 rows={6}
-                                placeholder="Tell me about your project..."
+                                placeholder={t('contact.form.messagePlaceholder')}
                             />
                         </div>
 
@@ -141,7 +143,7 @@ const Contact: React.FC = () => {
                             whileHover={{ scale: 1.05, y: -2 }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            Send Message
+                            {t('contact.form.send')}
                         </motion.button>
 
                         {status === 'success' && (
@@ -150,7 +152,7 @@ const Contact: React.FC = () => {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                             >
-                                ✅ Message sent successfully! I'll get back to you soon.
+                                {t('contact.form.success')}
                             </motion.div>
                         )}
 
@@ -160,7 +162,7 @@ const Contact: React.FC = () => {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                             >
-                                ❌ Something went wrong. Please try again.
+                                {t('contact.form.error')}
                             </motion.div>
                         )}
                     </motion.form>
@@ -171,4 +173,3 @@ const Contact: React.FC = () => {
 };
 
 export default Contact;
-

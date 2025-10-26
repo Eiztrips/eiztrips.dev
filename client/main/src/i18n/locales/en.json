@@ -1,0 +1,81 @@
+{
+  "navbar": {
+    "logo": "Eiztrips",
+    "home": "Home",
+    "about": "About",
+    "skills": "Skills",
+    "projects": "Projects",
+    "contact": "Contact"
+  },
+  "hero": {
+    "badge": "👋 Welcome to my portfolio",
+    "greeting": "Hi, I'm {{name}}",
+    "subtitle": "Backend Developer & Aspiring Entrepreneur",
+    "description": "Specializing in Python, Java, and building scalable distributed systems. Passionate about clean code, DevOps, and creating innovative solutions.",
+    "viewWork": "View My Work",
+    "getInTouch": "Get In Touch"
+  },
+  "skills": {
+    "title": "Tech Stack",
+    "description": "Technologies and tools I use to bring ideas to life",
+    "additional": {
+      "info1": {
+        "title": "🚀 Always Learning",
+        "text": "Continuously expanding my knowledge in distributed systems, microservices, and cloud technologies"
+      },
+      "info2": {
+        "title": "💡 Problem Solver",
+        "text": "Passionate about writing clean, maintainable code and solving complex technical challenges"
+      },
+      "info3": {
+        "title": "🤝 Team Player",
+        "text": "Experience in collaborative development and agile methodologies"
+      }
+    }
+  },
+  "projects": {
+    "title": "Projects",
+    "description": "Explore my latest work and open-source contributions",
+    "loading": "Loading projects...",
+    "viewAll": "View All Projects on GitHub",
+    "noDescription": "No description provided"
+  },
+  "contact": {
+    "title": "Get In Touch",
+    "description": "Have a project in mind? Let's work together!",
+    "email": "Email",
+    "linkedin": "LinkedIn",
+    "github": "GitHub",
+    "location": "Available for remote work",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "namePlaceholder": "Your Name",
+      "emailPlaceholder": "your.email@example.com",
+      "messagePlaceholder": "Tell me about your project...",
+      "send": "Send Message",
+      "success": "✅ Message sent successfully! I'll get back to you soon.",
+      "error": "❌ Something went wrong. Please try again."
+    }
+  },
+  "footer": {
+    "description": "Backend Developer & Aspiring Entrepreneur",
+    "quickLinks": {
+      "home": "Home",
+      "about": "About",
+      "skills": "Skills",
+      "projects": "Projects",
+      "contact": "Contact"
+    },
+    "connect": {
+      "github": "GitHub",
+      "linkedin": "LinkedIn",
+      "email": "Email"
+    },
+    "techStack": "Tech Stack",
+    "builtWith": "Built with ❤️ using React, TypeScript & SCSS",
+    "copyright": "© {year} Eiztrips. All rights reserved."
+  }
+}
+

@@ -1,8 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import './Hero.scss';
+import { useI18n } from '../../i18n/i18n';
 
 const Hero: React.FC = () => {
+    const { t } = useI18n();
     return (
         <section id="hero" className="hero">
             <div className="hero-container">
@@ -18,7 +20,7 @@ const Hero: React.FC = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.2, duration: 0.5 }}
                     >
-                        👋 Welcome to my portfolio
+                        {t('hero.badge')}
                     </motion.div>
 
                     <motion.h1
@@ -27,7 +29,9 @@ const Hero: React.FC = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3, duration: 0.8 }}
                     >
-                        Hi, I'm <span className="gradient-text">Eiztrips</span>
+                        {t('hero.greeting', { name: 'Eiztrips' }).split('\n').map((s, i) => (
+                            <span key={i} className={i === 0 ? 'gradient-text' : ''}>{s}</span>
+                        ))}
                     </motion.h1>
 
                     <motion.p
@@ -36,7 +40,7 @@ const Hero: React.FC = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5, duration: 0.8 }}
                     >
-                        Backend Developer & Aspiring Entrepreneur
+                        {t('hero.subtitle')}
                     </motion.p>
 
                     <motion.p
@@ -45,8 +49,7 @@ const Hero: React.FC = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.7, duration: 0.8 }}
                     >
-                        Specializing in Python, Java, and building scalable distributed systems.
-                        Passionate about clean code, DevOps, and creating innovative solutions.
+                        {t('hero.description')}
                     </motion.p>
 
                     <motion.div
@@ -61,7 +64,7 @@ const Hero: React.FC = () => {
                             whileHover={{ scale: 1.05, y: -2 }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            View My Work
+                            {t('hero.viewWork')}
                         </motion.a>
                         <motion.a
                             href="#contact"
@@ -69,7 +72,7 @@ const Hero: React.FC = () => {
                             whileHover={{ scale: 1.05, y: -2 }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            Get In Touch
+                            {t('hero.getInTouch')}
                         </motion.a>
                     </motion.div>
 
@@ -145,4 +148,3 @@ const Hero: React.FC = () => {
 };
 
 export default Hero;
-

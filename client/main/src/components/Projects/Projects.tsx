@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import './Projects.scss';
+import { useI18n } from '../../i18n/i18n';
 
 interface Repository {
     id: number;
@@ -14,6 +15,7 @@ interface Repository {
 }
 
 const Projects: React.FC = () => {
+    const { t } = useI18n();
     const [repos, setRepos] = useState<Repository[]>([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState<string>('all');
@@ -82,9 +84,9 @@ const Projects: React.FC = () => {
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
                 >
-                    <h2 className="section-title">Projects</h2>
+                    <h2 className="section-title">{t('projects.title')}</h2>
                     <p className="section-description">
-                        Explore my latest work and open-source contributions
+                        {t('projects.description')}
                     </p>
                 </motion.div>
 
@@ -110,7 +112,7 @@ const Projects: React.FC = () => {
                 {loading ? (
                     <div className="loading">
                         <div className="spinner"></div>
-                        <p>Loading projects...</p>
+                        <p>{t('projects.loading')}</p>
                     </div>
                 ) : (
                     <motion.div
@@ -142,7 +144,7 @@ const Projects: React.FC = () => {
 
                                 <h3 className="project-title">{repo.name}</h3>
                                 <p className="project-description">
-                                    {repo.description || 'No description provided'}
+                                    {repo.description || t('projects.noDescription')}
                                 </p>
 
                                 <div className="project-footer">
@@ -189,7 +191,7 @@ const Projects: React.FC = () => {
                         whileHover={{ scale: 1.05, y: -2 }}
                         whileTap={{ scale: 0.95 }}
                     >
-                        View All Projects on GitHub
+                        {t('projects.viewAll')}
                     </motion.a>
                 </motion.div>
             </div>
@@ -198,4 +200,3 @@ const Projects: React.FC = () => {
 };
 
 export default Projects;
-
