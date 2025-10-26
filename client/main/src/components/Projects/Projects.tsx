@@ -8,7 +8,7 @@ interface Repository {
     name: string;
     description: string;
     html_url: string;
-    language: string;
+    language: string | null;
     stargazers_count: number;
     forks_count: number;
     topics: string[];
@@ -28,7 +28,8 @@ const Projects: React.FC = () => {
         try {
             const response = await fetch('https://api.github.com/users/eiztrips/repos?sort=updated&per_page=100');
             const data = await response.json();
-            setRepos(data.filter((repo: Repository) => !repo.name.includes('eiztrips') || repo.description));
+            // Показываем все публичные репозитории
+            setRepos(data);
             setLoading(false);
         } catch (error) {
             console.error('Error fetching repos:', error);
@@ -42,7 +43,8 @@ const Projects: React.FC = () => {
         ? repos
         : repos.filter(repo => repo.language === filter);
 
-    const getLanguageColor = (language: string): string => {
+    const getLanguageColor = (language: string | null): string => {
+        if (!language) return '#888';
         const colors: { [key: string]: string } = {
             Python: '#3776ab',
             JavaScript: '#f7df1e',
@@ -116,6 +118,7 @@ const Projects: React.FC = () => {
                     </div>
                 ) : (
                     <motion.div
+                        key={filter}
                         className="projects-grid"
                         variants={containerVariants}
                         initial="hidden"
