@@ -1,0 +1,264 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding-top: 80px;
+  overflow: hidden;
+
+  .hero-container {
+    @include container;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-xl;
+    align-items: center;
+
+    @include respond-to('lg') {
+      grid-template-columns: 1fr 1fr;
+      gap: $spacing-3xl;
+    }
+  }
+
+  .hero-content {
+    text-align: center;
+
+    @include respond-to('lg') {
+      text-align: left;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: $spacing-xs $spacing-md;
+      @include glass-effect('light');
+      border-radius: 50px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: $spacing-md;
+
+      .dark-theme & {
+        @include glass-effect('dark');
+      }
+    }
+
+    .hero-title {
+      margin-bottom: $spacing-md;
+      line-height: 1.1;
+
+      .gradient-text {
+        background: linear-gradient(135deg, $sky-blue-500, $sky-blue-700, $night-blue-800);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        background-size: 200% 200%;
+        animation: gradient-shift 5s ease infinite;
+
+        .dark-theme & {
+          background: linear-gradient(135deg, $sky-blue-300, $sky-blue-500, $sky-blue-400);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+      }
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      font-weight: 600;
+      margin-bottom: $spacing-sm;
+      color: $sky-blue-600;
+
+      .dark-theme & {
+        color: $sky-blue-400;
+      }
+    }
+
+    .hero-description {
+      font-size: clamp(1rem, 2vw, 1.125rem);
+      margin-bottom: $spacing-xl;
+      opacity: 0.8;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+
+      @include respond-to('lg') {
+        margin-left: 0;
+      }
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: $spacing-md;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: $spacing-xl;
+
+      @include respond-to('lg') {
+        justify-content: flex-start;
+      }
+
+      .btn {
+        padding: $spacing-sm $spacing-lg;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all $transition-fast;
+        display: inline-block;
+
+        &.btn-primary {
+          background: linear-gradient(135deg, $sky-blue-500, $sky-blue-600);
+          color: white;
+          box-shadow: 0 4px 20px rgba($sky-blue-500, 0.3);
+
+          &:hover {
+            box-shadow: 0 6px 30px rgba($sky-blue-500, 0.4);
+          }
+        }
+
+        &.btn-secondary {
+          @include glass-effect('light');
+          color: $sky-blue-700;
+
+          .dark-theme & {
+            @include glass-effect('dark');
+            color: $sky-blue-300;
+          }
+
+          &:hover {
+            background: rgba($sky-blue-500, 0.2);
+          }
+        }
+      }
+    }
+
+    .hero-social {
+      display: flex;
+      gap: $spacing-md;
+      justify-content: center;
+
+      @include respond-to('lg') {
+        justify-content: flex-start;
+      }
+
+      .social-link {
+        width: 48px;
+        height: 48px;
+        @include glass-effect('light');
+        border-radius: 50%;
+        @include flex-center;
+        transition: all $transition-fast;
+
+        .dark-theme & {
+          @include glass-effect('dark');
+        }
+
+        svg {
+          width: 24px;
+          height: 24px;
+          color: $sky-blue-600;
+
+          .dark-theme & {
+            color: $sky-blue-400;
+          }
+        }
+
+        &:hover {
+          background: rgba($sky-blue-500, 0.2);
+          box-shadow: 0 4px 20px rgba($sky-blue-500, 0.3);
+        }
+      }
+    }
+  }
+
+  .hero-visual {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    display: none;
+
+    @include respond-to('lg') {
+      display: block;
+    }
+
+    .floating-card {
+      position: absolute;
+      @include glass-effect('light');
+      padding: $spacing-md;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      transition: all $transition-normal;
+
+      .dark-theme & {
+        @include glass-effect('dark');
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      .card-icon {
+        font-size: 2.5rem;
+        margin-bottom: $spacing-xs;
+      }
+
+      .card-text {
+        font-size: 1rem;
+        font-weight: 600;
+        color: $sky-blue-700;
+
+        .dark-theme & {
+          color: $sky-blue-300;
+        }
+      }
+
+      &:hover {
+        transform: translateY(-10px) scale(1.05);
+        box-shadow: 0 12px 48px rgba($sky-blue-500, 0.3);
+      }
+
+      &.card-1 {
+        top: 10%;
+        left: 10%;
+        @include floating-animation(3s);
+      }
+
+      &.card-2 {
+        top: 10%;
+        right: 10%;
+        @include floating-animation(3.5s);
+        animation-delay: 0.5s;
+      }
+
+      &.card-3 {
+        bottom: 20%;
+        left: 5%;
+        @include floating-animation(4s);
+        animation-delay: 1s;
+      }
+
+      &.card-4 {
+        bottom: 20%;
+        right: 5%;
+        @include floating-animation(3.2s);
+        animation-delay: 1.5s;
+      }
+    }
+  }
+
+  .hero-scroll-indicator {
+    position: absolute;
+    bottom: $spacing-xl;
+    left: 50%;
+    transform: translateX(-50%);
+
+    .scroll-arrow {
+      font-size: 2rem;
+      color: $sky-blue-500;
+      opacity: 0.6;
+
+      .dark-theme & {
+        color: $sky-blue-400;
+      }
+    }
+  }
+}

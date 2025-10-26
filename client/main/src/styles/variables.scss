@@ -1,0 +1,51 @@
+// Color Palette
+$sky-blue-50: #f0f9ff;
+$sky-blue-100: #e0f2fe;
+$sky-blue-200: #bae6fd;
+$sky-blue-300: #7dd3fc;
+$sky-blue-400: #38bdf8;
+$sky-blue-500: #0ea5e9;
+$sky-blue-600: #0284c7;
+$sky-blue-700: #0369a1;
+
+$night-blue-800: #1e3a8a;
+$night-blue-900: #1e293b;
+$night-blue-950: #0f172a;
+$night-blue-975: #0a0f1e;
+
+// Glass Effect
+$glass-bg-light: rgba(255, 255, 255, 0.7);
+$glass-bg-dark: rgba(15, 23, 42, 0.7);
+$glass-border-light: rgba(255, 255, 255, 0.2);
+$glass-border-dark: rgba(255, 255, 255, 0.1);
+
+// Typography
+$font-primary: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+$font-mono: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', monospace;
+
+// Spacing
+$spacing-xs: 0.5rem;
+$spacing-sm: 1rem;
+$spacing-md: 1.5rem;
+$spacing-lg: 2rem;
+$spacing-xl: 3rem;
+$spacing-2xl: 4rem;
+$spacing-3xl: 6rem;
+
+// Breakpoints
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+$breakpoint-2xl: 1536px;
+
+// Transitions
+$transition-fast: 0.2s ease-in-out;
+$transition-normal: 0.3s ease-in-out;
+$transition-slow: 0.5s ease-in-out;
+
+// Z-index
+$z-navbar: 1000;
+$z-modal: 2000;
+$z-tooltip: 3000;
+

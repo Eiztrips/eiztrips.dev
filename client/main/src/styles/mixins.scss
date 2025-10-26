@@ -1,0 +1,108 @@
+@import './variables';
+
+// Glass Morphism Effect
+@mixin glass-effect($theme: 'light') {
+  @if $theme == 'light' {
+    background: $glass-bg-light;
+    border: 1px solid $glass-border-light;
+  } @else {
+    background: $glass-bg-dark;
+    border: 1px solid $glass-border-dark;
+  }
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+// Responsive breakpoints
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == 'sm' {
+    @media (min-width: $breakpoint-sm) {
+      @content;
+    }
+  } @else if $breakpoint == 'md' {
+    @media (min-width: $breakpoint-md) {
+      @content;
+    }
+  } @else if $breakpoint == 'lg' {
+    @media (min-width: $breakpoint-lg) {
+      @content;
+    }
+  } @else if $breakpoint == 'xl' {
+    @media (min-width: $breakpoint-xl) {
+      @content;
+    }
+  } @else if $breakpoint == 'xxl' {
+    @media (min-width: $breakpoint-2xl) {
+      @content;
+    }
+  }
+}
+
+// Smooth gradient animation
+@mixin animated-gradient($colors...) {
+  background: linear-gradient(45deg, $colors);
+  background-size: 200% 200%;
+  animation: gradient-shift 15s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+// Floating animation
+@mixin floating-animation($duration: 3s) {
+  animation: floating $duration ease-in-out infinite;
+}
+
+@keyframes floating {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+// Pulse glow effect
+@mixin pulse-glow($color, $duration: 2s) {
+  animation: pulse-glow $duration ease-in-out infinite;
+
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba($color, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba($color, 0.8);
+    }
+  }
+}
+
+// Flexbox center
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Container
+@mixin container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+
+  @include respond-to('lg') {
+    padding: 0 $spacing-xl;
+  }
+}
+

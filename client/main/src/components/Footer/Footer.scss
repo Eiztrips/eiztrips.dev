@@ -1,0 +1,112 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.footer {
+  @include glass-effect('light');
+  margin-top: $spacing-3xl;
+  padding: $spacing-3xl 0 $spacing-lg;
+
+  .dark-theme & {
+    @include glass-effect('dark');
+  }
+
+  .footer-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-xl;
+    margin-bottom: $spacing-xl;
+    padding-bottom: $spacing-xl;
+    border-bottom: 1px solid rgba($sky-blue-500, 0.2);
+
+    @include respond-to('sm') {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include respond-to('lg') {
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+    }
+  }
+
+  .footer-section {
+    h3,
+    h4 {
+      margin-bottom: $spacing-md;
+      color: $sky-blue-600;
+
+      .dark-theme & {
+        color: $sky-blue-400;
+      }
+    }
+
+    .footer-logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, $sky-blue-500, $sky-blue-700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+
+      .dark-theme & {
+        background: linear-gradient(135deg, $sky-blue-300, $sky-blue-500);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+    }
+
+    .footer-description {
+      opacity: 0.8;
+      line-height: 1.6;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-sm;
+
+      li {
+        a {
+          opacity: 0.8;
+          transition: all $transition-fast;
+          display: inline-block;
+
+          &:hover {
+            opacity: 1;
+            color: $sky-blue-500;
+            transform: translateX(5px);
+          }
+        }
+      }
+    }
+
+    .tech-icons {
+      display: flex;
+      gap: $spacing-sm;
+      font-size: 1.5rem;
+
+      span {
+        cursor: pointer;
+        transition: transform $transition-fast;
+
+        &:hover {
+          transform: scale(1.2) rotate(10deg);
+        }
+      }
+    }
+  }
+
+  .footer-bottom {
+    text-align: center;
+    opacity: 0.7;
+
+    p {
+      margin-bottom: $spacing-xs;
+      font-size: 0.875rem;
+    }
+
+    .footer-credit {
+      font-size: 0.8125rem;
+    }
+  }
+}

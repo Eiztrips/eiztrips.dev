@@ -1,0 +1,142 @@
+@import './variables';
+@import './mixins';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: $font-primary;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  transition: background-color $transition-normal;
+}
+
+// Light Theme
+body.light-theme {
+  background: linear-gradient(135deg, $sky-blue-50 0%, $sky-blue-100 50%, $sky-blue-200 100%);
+  color: $night-blue-900;
+}
+
+// Dark Theme
+body.dark-theme {
+  background: linear-gradient(135deg, $night-blue-975 0%, $night-blue-950 50%, $night-blue-900 100%);
+  color: $sky-blue-100;
+}
+
+// Smooth scrollbar
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body.light-theme ::-webkit-scrollbar-thumb {
+  background: $sky-blue-400;
+  border-radius: 10px;
+
+  &:hover {
+    background: $sky-blue-500;
+  }
+}
+
+body.dark-theme ::-webkit-scrollbar-thumb {
+  background: $night-blue-800;
+  border-radius: 10px;
+
+  &:hover {
+    background: $sky-blue-600;
+  }
+}
+
+// Selection
+::selection {
+  background: $sky-blue-400;
+  color: white;
+}
+
+// Links
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color $transition-fast;
+}
+
+// Typography
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+p {
+  line-height: 1.6;
+  font-size: clamp(1rem, 2vw, 1.125rem);
+}
+
+code {
+  font-family: $font-mono;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.875em;
+}
+
+body.light-theme code {
+  background: rgba($sky-blue-500, 0.1);
+  color: $sky-blue-700;
+}
+
+body.dark-theme code {
+  background: rgba($sky-blue-400, 0.1);
+  color: $sky-blue-300;
+}
+
+// Buttons
+button {
+  cursor: pointer;
+  font-family: $font-primary;
+  border: none;
+  outline: none;
+  transition: all $transition-fast;
+}
+
+// Utility Classes
+.container {
+  @include container;
+}
+
+.section {
+  padding: $spacing-3xl 0;
+
+  @include respond-to('lg') {
+    padding: 6rem 0;
+  }
+}
+
