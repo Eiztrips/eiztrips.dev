@@ -64,7 +64,7 @@ const Contact: React.FC = () => {
                         <div className="info-card">
                             <div className="info-icon">📧</div>
                             <h3>{t('contact.email')}</h3>
-                            <a href="mailto:contact@eiztrips.dev">contact@eiztrips.dev</a>
+                            <a href="mailto:eiztrips.dev@yandex.ru">eiztrips.dev@yandex.ru</a>
                         </div>
 
                         <div className="info-card">
@@ -79,7 +79,7 @@ const Contact: React.FC = () => {
                             <div className="info-icon">🐙</div>
                             <h3>{t('contact.github')}</h3>
                             <a href="https://github.com/eiztrips" target="_blank" rel="noopener noreferrer">
-                                github.com/eiztrips
+                                eiztrips
                             </a>
                         </div>
 

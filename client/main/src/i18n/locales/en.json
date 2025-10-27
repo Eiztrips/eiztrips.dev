@@ -8,8 +8,8 @@
     "contact": "Contact"
   },
   "hero": {
-    "badge": "👋 Welcome to my portfolio",
-    "greeting": "Hi, I'm {{name}}",
+    "badge": "👋 Welcome",
+    "greeting": "I'm {{name}}",
     "subtitle": "Backend Developer & Aspiring Entrepreneur",
     "description": "Specializing in Python, Java, and building scalable distributed systems. Passionate about clean code, DevOps, and creating innovative solutions.",
     "viewWork": "View My Work",

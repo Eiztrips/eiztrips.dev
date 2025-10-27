@@ -1,10 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import './Hero.scss';
 import { useI18n } from '../../i18n/i18n';
 
+// @ts-ignore
+import photo1 from '../../assets/gallery/camphoto_684387517.JPG';
+// @ts-ignore
+import photo2 from '../../assets/gallery/camphoto_684387517 2.JPG';
+import video1 from '../../assets/gallery/generated_video.mp4';
+import video2 from '../../assets/gallery/grok-video-6a023f7e-57aa-4326-ad84-234c8b43eaf2.mp4';
+import video3 from '../../assets/gallery/grok-video-9bb52cd1-836a-451a-9c51-29e922ffe3d2 (1).mp4';
+
+interface MediaFile {
+    src: string;
+    type: 'image' | 'video';
+}
+
 const Hero: React.FC = () => {
     const { t } = useI18n();
+
+    const [selectedMedia, setSelectedMedia] = useState<MediaFile[]>([]);
+
+    useEffect(() => {
+        const allMedia: MediaFile[] = [
+            { src: photo1, type: 'image' },
+            { src: photo2, type: 'image' },
+            { src: video1, type: 'video' },
+            { src: video2, type: 'video' },
+            { src: video3, type: 'video' },
+        ];
+
+        const shuffled = [...allMedia].sort(() => Math.random() - 0.5);
+        setSelectedMedia(shuffled.slice(0, 5));
+    }, []);
     return (
         <section id="hero" className="hero">
             <div className="hero-container">
@@ -115,22 +143,36 @@ const Hero: React.FC = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.5, duration: 1 }}
                 >
-                    <div className="floating-card card-1">
-                        <div className="card-icon">🐍</div>
-                        <div className="card-text">Python</div>
-                    </div>
-                    <div className="floating-card card-2">
-                        <div className="card-icon">☕</div>
-                        <div className="card-text">Java</div>
-                    </div>
-                    <div className="floating-card card-3">
-                        <div className="card-icon">🐳</div>
-                        <div className="card-text">Docker</div>
-                    </div>
-                    <div className="floating-card card-4">
-                        <div className="card-icon">🐘</div>
-                        <div className="card-text">PostgreSQL</div>
-                    </div>
+                    {selectedMedia.map((media, index) => (
+                        <div key={index} className={`floating-card card-${index + 1}`}>
+                            {media.type === 'image' ? (
+                                <img
+                                    src={media.src}
+                                    alt={`Gallery ${index + 1}`}
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'cover',
+                                        borderRadius: '12px'
+                                    }}
+                                />
+                            ) : (
+                                <video
+                                    src={media.src}
+                                    autoPlay
+                                    loop
+                                    muted
+                                    playsInline
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'cover',
+                                        borderRadius: '12px'
+                                    }}
+                                />
+                            )}
+                        </div>
+                    ))}
                 </motion.div>
             </div>
 

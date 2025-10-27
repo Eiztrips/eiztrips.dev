@@ -186,10 +186,13 @@
     .floating-card {
       position: absolute;
       @include glass-effect('light');
-      padding: $spacing-md;
+      padding: 0;
       border-radius: 20px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       transition: all $transition-normal;
+      overflow: hidden;
+      width: 150px;
+      height: 150px;
 
       .dark-theme & {
         @include glass-effect('dark');
@@ -217,30 +220,38 @@
       }
 
       &.card-1 {
-        top: 10%;
+        top: 5%;
         left: 10%;
         @include floating-animation(3s);
       }
 
       &.card-2 {
-        top: 10%;
+        top: 5%;
         right: 10%;
         @include floating-animation(3.5s);
         animation-delay: 0.5s;
       }
 
       &.card-3 {
-        bottom: 20%;
+        bottom: 25%;
         left: 5%;
         @include floating-animation(4s);
         animation-delay: 1s;
       }
 
       &.card-4 {
-        bottom: 20%;
+        bottom: 25%;
         right: 5%;
         @include floating-animation(3.2s);
         animation-delay: 1.5s;
+      }
+
+      &.card-5 {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        @include floating-animation(3.7s);
+        animation-delay: 0.8s;
       }
     }
   }
