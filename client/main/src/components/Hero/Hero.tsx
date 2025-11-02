@@ -7,7 +7,7 @@ import { useI18n } from '../../i18n/i18n';
 import photo1 from '../../assets/gallery/camphoto_684387517.JPG';
 // @ts-ignore
 import photo2 from '../../assets/gallery/camphoto_684387517 2.JPG';
-import video1 from '../../assets/gallery/generated_video.mp4';
+import video1 from '../../assets/gallery/video.mp4';
 import video2 from '../../assets/gallery/grok-video-6a023f7e-57aa-4326-ad84-234c8b43eaf2.mp4';
 import video3 from '../../assets/gallery/grok-video-9bb52cd1-836a-451a-9c51-29e922ffe3d2 (1).mp4';
 
@@ -123,15 +123,47 @@ const Hero: React.FC = () => {
                             </svg>
                         </motion.a>
                         <motion.a
-                            href="https://linkedin.com/in/eiztrips"
+                            href="https://leetcode.com/u/Eiztrips/s"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="social-link"
                             whileHover={{ scale: 1.2, y: -3 }}
                             whileTap={{ scale: 0.9 }}
                         >
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+                                <rect x="3" y="3" width="18" height="18" rx="4" fill="currentColor" />
+                                <path d="M8.5 9.5l5 3.5-5 3" fill="none" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                                <circle cx="17.5" cy="6.5" r="1.2" fill="#fff"/>
+                            </svg>
+                        </motion.a>
+                        <motion.a
+                            href="https://x.com/eiztrips"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="social-link"
+                            aria-label="X"
+                            whileHover={{ scale: 1.2, y: -3 }}
+                            whileTap={{ scale: 0.9 }}
+                        >
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="X" focusable="false">
+                                <title>X</title>
+                                <line x1="4" y1="4" x2="20" y2="20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                <line x1="20" y1="4" x2="4" y2="20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                            </svg>
+                        </motion.a>
+                        <motion.a
+                            href="https://habr.com/ru/users/eiztrips/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="social-link"
+                            aria-label="Habr"
+                            whileHover={{ scale: 1.2, y: -3 }}
+                            whileTap={{ scale: 0.9 }}
+                        >
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Habr">
+                                <title>Habr</title>
+                                <rect x="2" y="2" width="20" height="20" rx="4" fill="currentColor"/>
+                                <path d="M8 7v10h2V13h4v4h2V7h-2v4H10V7H8z" fill="#fff"/>
                             </svg>
                         </motion.a>
                     </motion.div>

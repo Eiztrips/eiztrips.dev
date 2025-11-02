@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: api_main_postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: api_main_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d ai_tourist_db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - api_main_network
+
+volumes:
+    postgres_data:
+
+networks:
+    api_main_network:

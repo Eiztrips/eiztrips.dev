@@ -52,9 +52,12 @@
 
     .skill-card {
       @include glass-effect('light');
-      padding: $spacing-lg;
+      padding: $spacing-xl;
       border-radius: 20px;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 80px;
       transition: all $transition-normal;
       cursor: pointer;
 
@@ -64,62 +67,17 @@
 
       &:hover {
         box-shadow: 0 12px 40px rgba($sky-blue-500, 0.3);
-
-        .skill-icon {
-          transform: scale(1.2) rotate(10deg);
-        }
-      }
-
-      .skill-icon {
-        font-size: 3rem;
-        margin-bottom: $spacing-sm;
-        transition: transform $transition-normal;
+        background: rgba($sky-blue-500, 0.1);
       }
 
       .skill-name {
-        font-size: 1.25rem;
+        font-size: 1.125rem;
         font-weight: 600;
-        margin-bottom: $spacing-md;
         color: $night-blue-900;
+        text-align: center;
 
         .dark-theme & {
           color: $sky-blue-100;
-        }
-      }
-
-      .skill-bar {
-        height: 8px;
-        background: rgba($sky-blue-500, 0.2);
-        border-radius: 10px;
-        overflow: hidden;
-        margin-bottom: $spacing-xs;
-
-        .skill-progress {
-          height: 100%;
-          background: linear-gradient(90deg, $sky-blue-400, $sky-blue-600);
-          border-radius: 10px;
-          position: relative;
-
-          &::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: shimmer 2s infinite;
-          }
-        }
-      }
-
-      .skill-level {
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: $sky-blue-600;
-
-        .dark-theme & {
-          color: $sky-blue-400;
         }
       }
     }
@@ -170,11 +128,3 @@
   }
 }
 
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}

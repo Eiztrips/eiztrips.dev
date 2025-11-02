@@ -5,8 +5,6 @@ import { useI18n } from '../../i18n/i18n';
 
 interface Skill {
     name: string;
-    icon: string;
-    level: number;
     category: string;
 }
 
@@ -14,21 +12,36 @@ const Skills: React.FC = () => {
     const { t } = useI18n();
 
     const skills: Skill[] = [
-        { name: 'Python', icon: '🐍', level: 90, category: 'Backend' },
-        { name: 'FastAPI', icon: '⚡', level: 85, category: 'Backend' },
-        { name: 'SQLAlchemy', icon: '🗄️', level: 80, category: 'Backend' },
-        { name: 'Pytest', icon: '✅', level: 85, category: 'Backend' },
-        { name: 'aioKafka', icon: '📨', level: 75, category: 'Backend' },
-        { name: 'Java', icon: '☕', level: 80, category: 'Backend' },
-        { name: 'Spring Boot', icon: '🍃', level: 75, category: 'Backend' },
-        { name: 'Hibernate', icon: '💾', level: 70, category: 'Backend' },
-        { name: 'Docker', icon: '🐳', level: 85, category: 'DevOps' },
-        { name: 'PostgreSQL', icon: '🐘', level: 85, category: 'Database' },
-        { name: 'Linux', icon: '🐧', level: 80, category: 'DevOps' },
-        { name: 'Git', icon: '📦', level: 85, category: 'Tools' },
+        { name: 'CORE', category: 'Python' },
+        { name: 'FastAPI', category: 'Python' },
+        { name: 'SQLAlchemy', category: 'Python' },
+        { name: 'Pytest', category: 'Python' },
+        { name: 'aioKafka', category: 'Python' },
+
+        { name: 'CORE', category: 'Java' },
+        { name: 'Spring Boot', category: 'Java' },
+        { name: 'Hibernate', category: 'Java' },
+        { name: 'JUnit', category: 'Java' },
+        { name: 'Gradle', category: 'Java' },
+
+        { name: 'Docker', category: 'DevOps' },
+        { name: 'Linux', category: 'DevOps' },
+        { name: 'Git', category: 'DevOps' },
+
+        { name: 'MySQL', category: 'Database' },
+        { name: 'PostgreSQL', category: 'Database' },
+        { name: 'MongoDB', category: 'Database' },
+
+        { name: 'Windows', category: 'OS' },
+        { name: 'MacOS', category: 'OS' },
+        { name: 'Arch_linux', category: 'OS' },
+        { name: 'Kali_linux', category: 'OS' },
+        { name: 'Ubuntu', category: 'OS' },
+        { name: "Debian", category: 'OS' },
+
     ];
 
-    const categories = Array.from(new Set(skills.map(skill => skill.category)));
+    const categories = ['Python', 'Java', 'DevOps', 'Database', 'OS'];
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -86,7 +99,7 @@ const Skills: React.FC = () => {
                         >
                             {skills
                                 .filter(skill => skill.category === category)
-                                .map((skill, index) => (
+                                .map((skill) => (
                                     <motion.div
                                         key={skill.name}
                                         className="skill-card"
@@ -94,18 +107,7 @@ const Skills: React.FC = () => {
                                         whileHover={{ y: -10, scale: 1.05 }}
                                         transition={{ type: 'spring', stiffness: 300 }}
                                     >
-                                        <div className="skill-icon">{skill.icon}</div>
                                         <h4 className="skill-name">{skill.name}</h4>
-                                        <div className="skill-bar">
-                                            <motion.div
-                                                className="skill-progress"
-                                                initial={{ width: 0 }}
-                                                whileInView={{ width: `${skill.level}%` }}
-                                                viewport={{ once: true }}
-                                                transition={{ duration: 1, delay: index * 0.1 }}
-                                            />
-                                        </div>
-                                        <span className="skill-level">{skill.level}%</span>
                                     </motion.div>
                                 ))}
                         </motion.div>

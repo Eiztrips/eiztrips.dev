@@ -28,7 +28,6 @@ const Footer: React.FC = () => {
                         <h4>{t('footer.quickLinks.home') /* quick label */ ? t('footer.quickLinks.home') : 'Quick Links'}</h4>
                         <ul className="footer-links">
                             <li><a href="#hero">{t('footer.quickLinks.home')}</a></li>
-                            <li><a href="#about">{t('footer.quickLinks.about')}</a></li>
                             <li><a href="#skills">{t('footer.quickLinks.skills')}</a></li>
                             <li><a href="#projects">{t('footer.quickLinks.projects')}</a></li>
                             <li><a href="#contact">{t('footer.quickLinks.contact')}</a></li>
@@ -36,21 +35,31 @@ const Footer: React.FC = () => {
                     </div>
 
                     <div className="footer-section">
-                        <h4>{t('footer.connect.github')}</h4>
+                        <h4>{t('footer.connect.title')}</h4>
                         <ul className="footer-links">
+                            <li>
+                                <a href="https://leetcode.com/u/Eiztrips/" target="_blank" rel="noopener noreferrer">
+                                    {t('footer.connect.leetcode')}
+                                </a>
+                            </li>
                             <li>
                                 <a href="https://github.com/eiztrips" target="_blank" rel="noopener noreferrer">
                                     {t('footer.connect.github')}
                                 </a>
                             </li>
                             <li>
-                                <a href="https://linkedin.com/in/eiztrips" target="_blank" rel="noopener noreferrer">
-                                    {t('footer.connect.linkedin')}
+                                <a href="mailto:contact@eiztrips.dev">
+                                    {t('footer.connect.email')}
                                 </a>
                             </li>
                             <li>
-                                <a href="mailto:contact@eiztrips.dev">
-                                    {t('footer.connect.email')}
+                                <a href="https://t.me/contact_eiztrips" target="_blank" rel="noopener noreferrer">
+                                    {t('footer.connect.telegram')}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://discord.gg/WWfshaCBj7" target="_blank" rel="noopener noreferrer">
+                                    {t('footer.connect.discord')}
                                 </a>
                             </li>
                         </ul>

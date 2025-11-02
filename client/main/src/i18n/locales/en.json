@@ -1,8 +1,7 @@
 {
   "navbar": {
-    "logo": "Eiztrips",
+    "logo": "Eiztrips | V1.0",
     "home": "Home",
-    "about": "About",
     "skills": "Skills",
     "projects": "Projects",
     "contact": "Contact"
@@ -16,19 +15,19 @@
     "getInTouch": "Get In Touch"
   },
   "skills": {
-    "title": "Tech Stack",
+    "title": "Skills & tech Stack",
     "description": "Technologies and tools I use to bring ideas to life",
     "additional": {
       "info1": {
-        "title": "🚀 Always Learning",
+        "title": "Always Learning",
         "text": "Continuously expanding my knowledge in distributed systems, microservices, and cloud technologies"
       },
       "info2": {
-        "title": "💡 Problem Solver",
+        "title": "Problem Solver",
         "text": "Passionate about writing clean, maintainable code and solving complex technical challenges"
       },
       "info3": {
-        "title": "🤝 Team Player",
+        "title": "Team Player",
         "text": "Experience in collaborative development and agile methodologies"
       }
     }
@@ -44,9 +43,8 @@
     "title": "Get In Touch",
     "description": "Have a project in mind? Let's work together!",
     "email": "Email",
-    "linkedin": "LinkedIn",
+    "telegram": "Telegram",
     "github": "GitHub",
-    "location": "Available for remote work",
     "form": {
       "name": "Name",
       "email": "Email",
@@ -63,18 +61,20 @@
     "description": "Backend Developer & Aspiring Entrepreneur",
     "quickLinks": {
       "home": "Home",
-      "about": "About",
       "skills": "Skills",
       "projects": "Projects",
       "contact": "Contact"
     },
     "connect": {
+      "title": "Links",
+      "leetcode": "LeetCode",
       "github": "GitHub",
-      "linkedin": "LinkedIn",
-      "email": "Email"
+      "email": "Email",
+      "discord": "Discord",
+      "telegram": "Telegram"
     },
     "techStack": "Tech Stack",
-    "builtWith": "Built with ❤️ using React, TypeScript & SCSS",
+    "builtWith": "Built with 😡 using React, TypeScript & SCSS",
     "copyright": "© {year} Eiztrips. All rights reserved."
   }
 }

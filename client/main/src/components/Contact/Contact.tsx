@@ -68,25 +68,19 @@ const Contact: React.FC = () => {
                         </div>
 
                         <div className="info-card">
-                            <div className="info-icon">💼</div>
-                            <h3>{t('contact.linkedin')}</h3>
-                            <a href="https://linkedin.com/in/eiztrips" target="_blank" rel="noopener noreferrer">
-                                linkedin.com/in/eiztrips
+                            <div className="info-icon">👤</div>
+                            <h3>{t('contact.telegram')}</h3>
+                            <a href="https://t.me/contact_eiztrips" target="_blank" rel="noopener noreferrer">
+                                @contact_eiztrips
                             </a>
                         </div>
 
                         <div className="info-card">
-                            <div className="info-icon">🐙</div>
-                            <h3>{t('contact.github')}</h3>
-                            <a href="https://github.com/eiztrips" target="_blank" rel="noopener noreferrer">
-                                eiztrips
+                            <div className="info-icon">💬</div>
+                            <h3>{t('contact.discord')}</h3>
+                            <a href="https://discord.gg/WWfshaCBj7" target="_blank" rel="noopener noreferrer">
+                                @eiztrips
                             </a>
-                        </div>
-
-                        <div className="info-card">
-                            <div className="info-icon">📍</div>
-                            <h3>{t('contact.location')}</h3>
-                            <p>{t('contact.location')}</p>
                         </div>
                     </motion.div>
 
