@@ -32,7 +32,7 @@ public class AuthService {
     private String vkClientApiVersion;
 
     public String VkAuthRedirect() {
-        String redirectUri = defaultApiUrl + "/v1/users/vk/callback";
+        String redirectUri = defaultApiUrl + "/v1/auth/vk/callback";
         String responseType = "code";
         String display = "popup";
 
@@ -62,7 +62,7 @@ public class AuthService {
     private String getVkAccessToken(String code) {
         String url = "https://oauth.vk.com/access_token?client_id=" + vkClientApiKey +
                 "&client_secret=" + vkClientSecret +
-                "&redirect_uri=" + defaultApiUrl + "/v1/users/vk/callback" +
+                "&redirect_uri=" + defaultApiUrl + "/v1/auth/vk/callback" +
                 "&code=" + code;
 
         RestTemplate restTemplate = new RestTemplate();
