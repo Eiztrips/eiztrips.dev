@@ -4,9 +4,9 @@ import './Hero.scss';
 import { useI18n } from '../../i18n/i18n';
 
 // @ts-ignore
-import photo1 from '../../../public/assets/gallery/photo1.PNG';
+import photo1 from '../../../public/assets/gallery/photo1.png';
 // @ts-ignore
-import photo2 from '../../../public/assets/gallery/photo2.JPG';
+import photo2 from '../../../public/assets/gallery/photo2.jpg';
 import video1 from '../../../public/assets/gallery/video1.mp4';
 import video2 from '../../../public/assets/gallery/video2.mp4';
 import video3 from '../../../public/assets/gallery/video3.mp4';
