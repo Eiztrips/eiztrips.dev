@@ -3,7 +3,9 @@ import { motion } from 'framer-motion';
 import './Hero.scss';
 import { useI18n } from '../../i18n/i18n';
 
+// @ts-ignore
 import photo1 from '../../../public/assets/gallery/photo1.PNG';
+// @ts-ignore
 import photo2 from '../../../public/assets/gallery/photo2.JPG';
 import video1 from '../../../public/assets/gallery/video1.mp4';
 import video2 from '../../../public/assets/gallery/video2.mp4';

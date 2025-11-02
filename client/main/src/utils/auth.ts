@@ -23,6 +23,6 @@ export const getVKAuthUrl = (): string => {
 };
 
 export const getTelegramAuthUrl = (): string => {
-    return `${base}/api/v1/auth/telegram`;
+    return `${base}/v1/auth/telegram`;
 };
 
