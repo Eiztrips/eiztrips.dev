@@ -3,13 +3,11 @@ import { motion } from 'framer-motion';
 import './Hero.scss';
 import { useI18n } from '../../i18n/i18n';
 
-// @ts-ignore
-import photo1 from '../../assets/gallery/camphoto_684387517.JPG';
-// @ts-ignore
-import photo2 from '../../assets/gallery/camphoto_684387517 2.JPG';
-import video1 from '../../assets/gallery/video.mp4';
-import video2 from '../../assets/gallery/grok-video-6a023f7e-57aa-4326-ad84-234c8b43eaf2.mp4';
-import video3 from '../../assets/gallery/grok-video-9bb52cd1-836a-451a-9c51-29e922ffe3d2 (1).mp4';
+import photo1 from '../../../public/assets/gallery/photo1.PNG';
+import photo2 from '../../../public/assets/gallery/photo2.JPG';
+import video1 from '../../../public/assets/gallery/video1.mp4';
+import video2 from '../../../public/assets/gallery/video2.mp4';
+import video3 from '../../../public/assets/gallery/video3.mp4';
 
 interface MediaFile {
     src: string;

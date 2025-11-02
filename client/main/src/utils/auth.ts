@@ -3,7 +3,7 @@ const base = import.meta?.env?.VITE_DEFAULT_API_URL || 'http://localhost:8080';
 
 export const checkAuthToken = async (): Promise<boolean> => {
     try {
-        const response = await fetch(`${base}/api/auth/verify`, {
+        const response = await fetch(`${base}/v1/auth/verify`, {
             method: 'GET',
             credentials: 'include',
             headers: {
