@@ -1,15 +1,14 @@
 package dev.eiztrips.main.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.eiztrips.main.service.AuthService;
 import dev.eiztrips.main.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -18,6 +17,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final JwtService jwtService;
+    private final ObjectMapper objectMapper;
 
     @GetMapping("/vk")
     public RedirectView redirectToVk() {
@@ -26,8 +26,8 @@ public class AuthController {
     }
 
     @GetMapping("/vk/callback")
-    public RedirectView handleVkCallback(@RequestParam String code) {
-        String url = authService.handleVkCallback(code);
+    public RedirectView handleVkCallback(@RequestParam String payload) throws Exception {
+        String url = authService.handleVkCallback(objectMapper.readValue(payload, Map.class));
         return new RedirectView(url);
     }
 

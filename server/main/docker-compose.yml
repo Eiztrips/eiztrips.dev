@@ -34,7 +34,7 @@ services:
     volumes:
       - ./:/app:delegated
       - ~/.m2:/root/.m2
-      - ~/.gradle:/root/.gradle            # <-- кеш Gradle
+      - ~/.gradle:/root/.gradle
     depends_on:
       postgres:
         condition: service_healthy

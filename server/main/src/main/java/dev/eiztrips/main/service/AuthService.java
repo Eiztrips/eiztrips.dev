@@ -2,18 +2,23 @@ package dev.eiztrips.main.service;
 
 import dev.eiztrips.main.model.User;
 import dev.eiztrips.main.repository.UserRepository;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
+import java.util.Objects;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final RedisService redisService;
     private final JwtService jwtService;
 
     @Value("${default.api.url}")
@@ -25,68 +30,117 @@ public class AuthService {
     @Value("${vk.client.secret}")
     private String vkClientSecret;
 
-    @Value("${vk.client.api.key}")
-    private String vkClientApiKey;
+    @Value("${vk.client.app.id}")
+    private String vkClientAppId;
 
     @Value("${vk.client.api.version}")
     private String vkClientApiVersion;
 
     public String VkAuthRedirect() {
-        String redirectUri = defaultApiUrl + "/v1/auth/vk/callback";
         String responseType = "code";
-        String display = "popup";
+        String clientId = vkClientAppId;
+        String codeChallenge = generateCodeChallenge(generateCodeVerifier());
+        String codeChallengeMethod = "S256";
+        String redirectUri = defaultApiUrl + "/api/v1/auth/vk/callback";
+        String state = generateState();
 
-        return "https://oauth.vk.com/authorize?" +
-                "client_id=" + vkClientApiKey +
+        redisService.saveState(state, Map.of(
+                "code_verifier", codeChallenge
+        ));
+
+        return "response_type=" + responseType +
+        "&client_id=" + clientId +
+        "&code_challenge=" + codeChallenge +
+        "&code_challenge_method=" + codeChallengeMethod +
+        "&redirect_uri=" + redirectUri +
+        "&state=" + state;
+    }
+
+    private static String generateCodeVerifier() {
+        java.security.SecureRandom sr = new java.security.SecureRandom();
+        byte[] bytes = new byte[32];
+        sr.nextBytes(bytes);
+        return java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+    }
+
+    private static String generateCodeChallenge(String codeVerifier) {
+        try {
+            java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(codeVerifier.getBytes(java.nio.charset.StandardCharsets.US_ASCII));
+            return java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(hash);
+        } catch (Exception e) {
+            throw new RuntimeException("Error generating code challenge", e);
+        }
+    }
+
+    private static String generateState() {
+        java.security.SecureRandom sr = new java.security.SecureRandom();
+        byte[] bytes = new byte[24];
+        sr.nextBytes(bytes);
+        return java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+    }
+
+    public String handleVkCallback(Map<String, String > payload) {
+        String state = payload.get("state");
+
+        Map<String, String> redisData = redisService.getState(state);
+        if (redisData == null)
+            throw new IllegalArgumentException("Invalid state parameter");
+
+        if (!Objects.equals(state, redisData.get("state")))
+            throw new IllegalArgumentException("State parameter does not match");
+
+        if (redisData.get("access_token") == null) redisService.addState(state, getAccessTokenFromVk(payload));
+        if (redisData.get("first_name") == null) redisService.addState(state, getUserDataFromVk(payload));
+
+        getOrCreateUser(
+                redisData.get("first_name") + " " + redisData.get("last_name"),
+                "https://vk.com/id" + redisData.get("user_id"),
+                Long.parseLong(redisData.get("user_id")),
+                redisData
+        );
+
+        return "";
+    }
+
+    private Map<String, String> getAccessTokenFromVk(Map<String, String> data) {
+        String grantType = "authorization_code";
+        String code = data.get("code");
+        String codeVerifier = data.get("code_verifier");
+        String clientId = vkClientAppId;
+        String deviceId = data.get("device_id");
+        String redirectUri = defaultApiUrl + "/api/v1/auth/vk/callback";
+        String state = data.get("state");
+        String url = "https://id.vk.ru/oauth2/token" +
+                "?client_id=" + clientId +
+                "&grant_type=" + grantType +
+                "&code=" + code +
+                "&code_verifier=" + codeVerifier +
+                "&device_id=" + deviceId +
                 "&redirect_uri=" + redirectUri +
-                "&response_type=" + responseType +
-                "&display=" + display;
-    }
-
-    public String handleVkCallback(String code) {
-        String accessToken = getVkAccessToken(code);
-        Map<String, Object> userInfo = getVkUserInfo(accessToken);
-
-        String username = (String) userInfo.get("first_name") + " " + userInfo.get("last_name");
-        String link = "https://vk.com/id" + userInfo.get("id");
-        Long vkId = ((Number) userInfo.get("id")).longValue();
-
-        getOrCreateUser(username, link, vkId);
-
-        String jwt_access_token = jwtService.generateTokenWithId(String.valueOf(vkId));
-        String mode = "vk";
-
-        return defaultClientUrl + "/auth/vk/success?access_token=" + jwt_access_token + "&mode=" + mode;
-    }
-
-    private String getVkAccessToken(String code) {
-        String url = "https://oauth.vk.com/access_token?client_id=" + vkClientApiKey +
-                "&client_secret=" + vkClientSecret +
-                "&redirect_uri=" + defaultApiUrl + "/v1/auth/vk/callback" +
-                "&code=" + code;
-
+                "&state=" + state;
         RestTemplate restTemplate = new RestTemplate();
-        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
-        return (String) response.get("access_token");
+        return restTemplate.postForObject(url, null, Map.class);
     }
-    private Map<String, Object> getVkUserInfo(String accessToken) {
-        String url = "https://api.vk.com/method/users.get?access_token=" + accessToken +
-                "&v=" + vkClientApiVersion;
 
+    private Map<String, String> getUserDataFromVk(Map<String, String> data) {
+        String accessToken = data.get("access_token");
+        String clientId = vkClientAppId;
+        String url = "https://id.vk.ru/oauth2/user_info" +
+                "?access_token=" + accessToken +
+                "&client_id=" + clientId;
         RestTemplate restTemplate = new RestTemplate();
-        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
-        return (
-                (java.util.List<Map<String, Object>>) response.get("response")
-        ).getFirst();
+        return restTemplate.postForObject(url, null, Map.class);
     }
 
 
-    private void getOrCreateUser(String username, String link, Long appId) {
+    private void getOrCreateUser(String username, String link, Long appId, Map<String, String> userData) {
         if (userRepository.getUserByAppId(appId).isEmpty()) {
             User user = User.builder()
                     .username(username)
                     .link(link)
                     .appId(appId)
+                    .userData(userData)
                     .build();
             userRepository.save(user);
         }
