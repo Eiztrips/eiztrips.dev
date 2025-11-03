@@ -48,7 +48,7 @@ public class AuthService {
                 "code_verifier", codeChallenge
         ));
 
-        return "response_type=" + responseType +
+        return "https://id.vk.ru/authorize" + "?response_type=" + responseType +
         "&client_id=" + clientId +
         "&code_challenge=" + codeChallenge +
         "&code_challenge_method=" + codeChallengeMethod +
