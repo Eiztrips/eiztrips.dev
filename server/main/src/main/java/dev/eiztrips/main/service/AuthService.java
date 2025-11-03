@@ -124,7 +124,7 @@ public class AuthService {
         String deviceId = data.get("device_id");
         String redirectUri = defaultApiUrl + "/v1/auth/vk/callback";
         String state = data.get("state");
-        String url = "https://id.vk.ru/oauth2/token" +
+        String url = "https://id.vk.ru/oauth2/auth" +
                 "?client_id=" + clientId +
                 "&grant_type=" + grantType +
                 "&code=" + code +
@@ -133,7 +133,7 @@ public class AuthService {
                 "&redirect_uri=" + redirectUri +
                 "&state=" + state;
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(url, Map.class);
+        return restTemplate.postForObject(url, null, Map.class);
     }
 
     private Map<String, String> getUserDataFromVk(Map<String, String> data) {
@@ -143,7 +143,7 @@ public class AuthService {
                 "?access_token=" + accessToken +
                 "&client_id=" + clientId;
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(url, Map.class);
+        return restTemplate.getForObject(url, null, Map.class);
     }
 
 
