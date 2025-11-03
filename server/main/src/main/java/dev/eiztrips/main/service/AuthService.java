@@ -115,7 +115,9 @@ public class AuthService {
                 redisData
         );
 
-        return defaultClientUrl;
+        String jwtToken = jwtService.generateTokenWithId(redisData.get("user_id").toString());
+
+        return defaultClientUrl + "/auth/success?token=" + jwtToken + "&mode=vk";
     }
 
     private Map<String, String> getAccessTokenFromVk(Map<String, String> data) {
