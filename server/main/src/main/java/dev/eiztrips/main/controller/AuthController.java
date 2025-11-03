@@ -28,7 +28,7 @@ public class AuthController {
             @RequestParam String code,
             @RequestParam String state,
             @RequestParam String device_id
-    ) throws Exception {
+    ) {
         Map<String, String> params = Map.of(
                 "code", code,
                 "state", state,

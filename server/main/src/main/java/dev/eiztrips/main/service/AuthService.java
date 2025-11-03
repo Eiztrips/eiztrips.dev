@@ -19,8 +19,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final UserRepository userRepository;
     private final RedisService redisService;
+    private final UserService userService;
     private final JwtService jwtService;
 
     @Value("${default.api.url}")
@@ -29,15 +29,10 @@ public class AuthService {
     @Value("${default.client.url}")
     private String defaultClientUrl;
 
-    @Value("${vk.client.secret}")
-    private String vkClientSecret;
-
     @Value("${vk.client.app.id}")
     private String vkClientAppId;
 
-    @Value("${vk.client.api.version}")
-    private String vkClientApiVersion;
-
+    // ----------------- VK AUTH -----------------
     public String VkAuthRedirect() {
         String responseType = "code";
         String clientId = vkClientAppId;
@@ -84,7 +79,8 @@ public class AuthService {
         return java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 
-    public String handleVkCallback(Map<String, String > payload) {
+    // ----------------- VK CALLBACK -----------------
+    public String handleVkCallback(Map<String, String> payload) {
         String state = payload.get("state");
 
         Map<String, String> redisData = redisService.getState(state);
@@ -108,16 +104,18 @@ public class AuthService {
 
         redisData = redisService.getState(state);
 
-        getOrCreateUser(
+        userService.getOrCreateUser(
                 redisData.get("first_name") + " " + redisData.get("last_name"),
                 "https://vk.com/id" + redisData.get("user_id"),
                 Long.parseLong(redisData.get("user_id")),
                 redisData
         );
 
-        String jwtToken = jwtService.generateTokenWithId(redisData.get("user_id").toString());
+        String jwtToken = jwtService.generateTokenWithAppId(redisData.get("user_id"));
 
-        return defaultClientUrl + "/auth/success?token=" + jwtToken + "&mode=vk";
+        redisService.removeState(state);
+
+        return defaultClientUrl + "/auth/success?token=" + jwtToken + "&mode=vk" + "&username=" + redisData.get("first_name");
     }
 
     private Map<String, String> getAccessTokenFromVk(Map<String, String> data) {
@@ -158,18 +156,5 @@ public class AuthService {
             userMap.forEach((key, value) -> result.put(key, String.valueOf(value)));
         }
         return result;
-    }
-
-
-    private void getOrCreateUser(String username, String link, Long appId, Map<String, String> userData) {
-        if (userRepository.getUserByAppId(appId).isEmpty()) {
-            User user = User.builder()
-                    .username(username)
-                    .link(link)
-                    .appId(appId)
-                    .userData(userData)
-                    .build();
-            userRepository.save(user);
-        }
     }
 }

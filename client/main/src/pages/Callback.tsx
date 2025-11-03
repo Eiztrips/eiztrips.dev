@@ -9,8 +9,9 @@ const Callback: React.FC = () => {
     useEffect(() => {
         const token = searchParams.get("token");
         const mode = searchParams.get("mode");
+        const userName = searchParams.get("username");
 
-        if (token && mode) {
+        if (token && mode && userName) {
             Cookies.set("jwt", token, {
                 expires: 1,
                 secure: true,
@@ -22,6 +23,12 @@ const Callback: React.FC = () => {
                 secure: true,
                 sameSite: "strict"
             });
+
+            Cookies.set("username", userName, {
+                expires: 1,
+                secure: true,
+                sameSite: "strict"
+            })
 
             navigate("/");
         } else {

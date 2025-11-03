@@ -27,7 +27,7 @@ function App() {
                           }
                       />
                       <Route
-                          path="/callback"
+                          path="/auth/success"
                           element={<Callback />}
                       />
                   </Routes>

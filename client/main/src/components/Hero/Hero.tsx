@@ -10,6 +10,7 @@ import photo2 from '../../../public/assets/gallery/photo2.jpg';
 import video1 from '../../../public/assets/gallery/video1.mp4';
 import video2 from '../../../public/assets/gallery/video2.mp4';
 import video3 from '../../../public/assets/gallery/video3.mp4';
+import Cookies from "js-cookie";
 
 interface MediaFile {
     src: string;
@@ -48,7 +49,7 @@ const Hero: React.FC = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.2, duration: 0.5 }}
                     >
-                        {t('hero.badge')}
+                        {t('hero.badge') + (Cookies.get("username") ? `, ${Cookies.get("username")}` : '')}
                     </motion.div>
 
                     <motion.h1
