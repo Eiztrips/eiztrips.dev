@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
@@ -117,33 +119,43 @@ public class AuthService {
     }
 
     private Map<String, String> getAccessTokenFromVk(Map<String, String> data) {
-        String grantType = "authorization_code";
-        String code = data.get("code");
-        String codeVerifier = data.get("code_verifier");
-        String clientId = vkClientAppId;
-        String deviceId = data.get("device_id");
-        String redirectUri = defaultApiUrl + "/v1/auth/vk/callback";
-        String state = data.get("state");
-        String url = "https://id.vk.ru/oauth2/auth" +
-                "?client_id=" + clientId +
-                "&grant_type=" + grantType +
-                "&code=" + code +
-                "&code_verifier=" + codeVerifier +
-                "&device_id=" + deviceId +
-                "&redirect_uri=" + redirectUri +
-                "&state=" + state;
+        String url = "https://id.vk.ru/oauth2/auth";
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("client_id", vkClientAppId);
+        params.add("grant_type", "authorization_code");
+        params.add("code", data.get("code"));
+        params.add("code_verifier", data.get("code_verifier"));
+        params.add("device_id", data.get("device_id"));
+        params.add("redirect_uri", defaultApiUrl + "/v1/auth/vk/callback");
+        params.add("state", data.get("state"));
+
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.postForObject(url, null, Map.class);
+        Map<String, Object> response = restTemplate.postForObject(url, params, Map.class);
+
+        Map<String, String> result = new java.util.HashMap<>();
+        if (response != null) {
+            response.forEach((key, value) -> result.put(key, String.valueOf(value)));
+        }
+        return result;
     }
 
     private Map<String, String> getUserDataFromVk(Map<String, String> data) {
-        String accessToken = data.get("access_token");
-        String clientId = vkClientAppId;
-        String url = "https://id.vk.ru/oauth2/user_info" +
-                "?access_token=" + accessToken +
-                "&client_id=" + clientId;
+        String url = "https://id.vk.ru/oauth2/user_info";
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("client_id", vkClientAppId);
+        params.add("access_token", data.get("access_token"));
+
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(url, null, Map.class);
+        Map<String, Object> response = restTemplate.postForObject(url, params, Map.class);
+
+        Map<String, String> result = new java.util.HashMap<>();
+        if (response != null && response.get("user") instanceof Map) {
+            Map<String, Object> userMap = (Map<String, Object>) response.get("user");
+            userMap.forEach((key, value) -> result.put(key, String.valueOf(value)));
+        }
+        return result;
     }
 
 
