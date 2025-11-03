@@ -6,13 +6,19 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -31,6 +37,9 @@ public class AuthService {
 
     @Value("${vk.client.app.id}")
     private String vkClientAppId;
+
+    @Value("${tg.bot.token}")
+    private String BOT_TOKEN;
 
     // ----------------- VK AUTH -----------------
     public String VkAuthRedirect() {
@@ -156,5 +165,51 @@ public class AuthService {
             userMap.forEach((key, value) -> result.put(key, String.valueOf(value)));
         }
         return result;
+    }
+
+    // ----------------- TG CALLBACK -----------------
+    public ResponseEntity<?> handleTgCallback(Map<String, String> data) {
+        String hash = data.remove("hash");
+
+        String dataCheckString = data.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(e -> e.getKey() + "=" + e.getValue())
+                .collect(Collectors.joining("\n"));
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] secretKey = digest.digest(BOT_TOKEN.getBytes(StandardCharsets.UTF_8));
+
+            Mac mac = Mac.getInstance("HmacSHA256");
+            mac.init(new SecretKeySpec(secretKey, "HmacSHA256"));
+            byte[] hmac = mac.doFinal(dataCheckString.getBytes(StandardCharsets.UTF_8));
+
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hmac) sb.append(String.format("%02x", b));
+            String calculatedHash = sb.toString();
+
+            if (!calculatedHash.equals(hash)) {
+                return ResponseEntity.status(403).body("Invalid Telegram data");
+            }
+
+            long authDate = Long.parseLong(data.get("auth_date"));
+            if (System.currentTimeMillis()/1000 - authDate > 300) {
+                return ResponseEntity.status(403).body("Data expired");
+            }
+
+            userService.getOrCreateUser(
+                    data.get("first_name") + (data.get("last_name") != null ? " " + data.get("last_name") : ""),
+                    "https://t.me/" + data.get("username"),
+                    Long.parseLong(data.get("id")),
+                    data
+            );
+
+            return ResponseEntity.ok(Map.of(
+                    "status", "ok",
+                    "user", data
+            ));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Server error: " + e.getMessage());
+        }
     }
 }

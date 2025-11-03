@@ -21,8 +21,3 @@ export const checkAuthToken = async (): Promise<boolean> => {
 export const getVKAuthUrl = (): string => {
     return `${base}/v1/auth/vk`;
 };
-
-export const getTelegramAuthUrl = (): string => {
-    return `${base}/v1/auth/telegram`;
-};
-

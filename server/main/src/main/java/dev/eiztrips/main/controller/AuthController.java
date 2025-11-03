@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -24,19 +25,16 @@ public class AuthController {
     }
 
     @GetMapping("/vk/callback")
-    public RedirectView handleVkCallback(
-            @RequestParam String code,
-            @RequestParam String state,
-            @RequestParam String device_id
-    ) {
-        Map<String, String> params = Map.of(
-                "code", code,
-                "state", state,
-                "device_id", device_id
-        );
-        String url = authService.handleVkCallback(params);
+    public RedirectView handleVkCallback(@RequestParam String code, @RequestParam String state, @RequestParam String device_id) {
+        String url = authService.handleVkCallback(Map.of("code", code, "state", state, "device_id", device_id));
         return new RedirectView(url);
     }
+
+    @PostMapping("/tg/callback")
+    public ResponseEntity<?> telegramAuth(@RequestBody Map<String, String> data) {
+        return authService.handleTgCallback(data);
+    }
+
 
     @GetMapping("/verify")
     public ResponseEntity<String> verifyToken(@CookieValue(value = "jwt", required = false) String token) {

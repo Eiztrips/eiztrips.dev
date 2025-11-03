@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import './Contact.scss';
 import { useI18n } from '../../i18n/i18n';
-import { checkAuthToken, getVKAuthUrl, getTelegramAuthUrl } from '../../utils/auth';
+import { checkAuthToken, getVKAuthUrl } from '../../utils/auth';
+import {TelegramLoginButton} from "./TelegramLoginButton.tsx";
 
 const Contact: React.FC = () => {
     const { t } = useI18n();
@@ -50,10 +51,6 @@ const Contact: React.FC = () => {
 
     const handleVKLogin = () => {
         window.location.href = getVKAuthUrl();
-    };
-
-    const handleTelegramLogin = () => {
-        window.location.href = getTelegramAuthUrl();
     };
 
     return (
@@ -214,17 +211,7 @@ const Contact: React.FC = () => {
                                     <span className="btn-icon">🔵</span>
                                     Войти через ВКонтакте
                                 </motion.button>
-
-                                <motion.button
-                                    type="button"
-                                    className="btn btn-telegram"
-                                    onClick={handleTelegramLogin}
-                                    whileHover={{ scale: 1.05, y: -2 }}
-                                    whileTap={{ scale: 0.95 }}
-                                >
-                                    <span className="btn-icon">✈️</span>
-                                    Войти через Telegram
-                                </motion.button>
+                                <TelegramLoginButton />
                             </div>
                         </motion.div>
                     )}
