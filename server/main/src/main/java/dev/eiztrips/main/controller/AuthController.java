@@ -1,6 +1,5 @@
 package dev.eiztrips.main.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.eiztrips.main.service.AuthService;
 import dev.eiztrips.main.service.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,6 @@ public class AuthController {
 
     private final AuthService authService;
     private final JwtService jwtService;
-    private final ObjectMapper objectMapper;
 
     @GetMapping("/vk")
     public RedirectView redirectToVk() {
@@ -26,8 +24,17 @@ public class AuthController {
     }
 
     @GetMapping("/vk/callback")
-    public RedirectView handleVkCallback(@RequestParam String payload) throws Exception {
-        String url = authService.handleVkCallback(objectMapper.readValue(payload, Map.class));
+    public RedirectView handleVkCallback(
+            @RequestParam String code,
+            @RequestParam String state,
+            @RequestParam String device_id
+    ) throws Exception {
+        Map<String, String> params = Map.of(
+                "code", code,
+                "state", state,
+                "device_id", device_id
+        );
+        String url = authService.handleVkCallback(params);
         return new RedirectView(url);
     }
 

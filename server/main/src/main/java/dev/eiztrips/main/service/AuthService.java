@@ -39,13 +39,15 @@ public class AuthService {
     public String VkAuthRedirect() {
         String responseType = "code";
         String clientId = vkClientAppId;
-        String codeChallenge = generateCodeChallenge(generateCodeVerifier());
+        String codeVerifier = generateCodeVerifier();
+        String codeChallenge = generateCodeChallenge(codeVerifier);
         String codeChallengeMethod = "S256";
-        String redirectUri = defaultApiUrl + "/api/v1/auth/vk/callback";
+        String redirectUri = defaultApiUrl + "/v1/auth/vk/callback";
         String state = generateState();
 
         redisService.saveState(state, Map.of(
-                "code_verifier", codeChallenge
+                "code_verifier", codeVerifier,
+                "code_challenge", codeChallenge
         ));
 
         return "https://id.vk.ru/authorize" + "?response_type=" + responseType +
@@ -87,11 +89,22 @@ public class AuthService {
         if (redisData == null)
             throw new IllegalArgumentException("Invalid state parameter");
 
-        if (!Objects.equals(state, redisData.get("state")))
-            throw new IllegalArgumentException("State parameter does not match");
+        Map<String, String> combinedData = new java.util.HashMap<>(redisData);
+        combinedData.putAll(payload);
 
-        if (redisData.get("access_token") == null) redisService.addState(state, getAccessTokenFromVk(payload));
-        if (redisData.get("first_name") == null) redisService.addState(state, getUserDataFromVk(payload));
+        if (redisData.get("access_token") == null) {
+            Map<String, String> tokenData = getAccessTokenFromVk(combinedData);
+            redisService.addState(state, tokenData);
+            combinedData.putAll(tokenData);
+        }
+
+        if (redisData.get("first_name") == null) {
+            Map<String, String> userData = getUserDataFromVk(combinedData);
+            redisService.addState(state, userData);
+            combinedData.putAll(userData);
+        }
+
+        redisData = redisService.getState(state);
 
         getOrCreateUser(
                 redisData.get("first_name") + " " + redisData.get("last_name"),
@@ -100,7 +113,7 @@ public class AuthService {
                 redisData
         );
 
-        return "";
+        return defaultClientUrl;
     }
 
     private Map<String, String> getAccessTokenFromVk(Map<String, String> data) {
@@ -109,7 +122,7 @@ public class AuthService {
         String codeVerifier = data.get("code_verifier");
         String clientId = vkClientAppId;
         String deviceId = data.get("device_id");
-        String redirectUri = defaultApiUrl + "/api/v1/auth/vk/callback";
+        String redirectUri = defaultApiUrl + "/v1/auth/vk/callback";
         String state = data.get("state");
         String url = "https://id.vk.ru/oauth2/token" +
                 "?client_id=" + clientId +
@@ -120,7 +133,7 @@ public class AuthService {
                 "&redirect_uri=" + redirectUri +
                 "&state=" + state;
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.postForObject(url, null, Map.class);
+        return restTemplate.getForObject(url, Map.class);
     }
 
     private Map<String, String> getUserDataFromVk(Map<String, String> data) {
@@ -130,7 +143,7 @@ public class AuthService {
                 "?access_token=" + accessToken +
                 "&client_id=" + clientId;
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.postForObject(url, null, Map.class);
+        return restTemplate.getForObject(url, Map.class);
     }
 
 
