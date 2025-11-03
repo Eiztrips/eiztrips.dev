@@ -15,8 +15,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/*/auth/**").permitAll() // сюда можно без логина
-                        .requestMatchers("/api/*/debug/**").permitAll()
+                        .requestMatchers("/api/**/auth/**").permitAll() // сюда можно без логина
+                        .requestMatchers("/api/**/debug/**").permitAll()
                         .anyRequest().authenticated()        // всё остальное требует JWT
                 )
                 .formLogin(AbstractHttpConfigurer::disable)  // отключить "Please sign in"
