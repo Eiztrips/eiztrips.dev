@@ -14,13 +14,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll() // сюда можно без логина
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/debug/**").permitAll()
-                        .anyRequest().authenticated()        // всё остальное требует JWT
+                        .anyRequest().authenticated()
                 )
-                .formLogin(AbstractHttpConfigurer::disable)  // отключить "Please sign in"
-                .httpBasic(AbstractHttpConfigurer::disable); // и базовую аутентификацию
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
