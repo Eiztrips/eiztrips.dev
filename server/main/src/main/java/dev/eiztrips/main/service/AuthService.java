@@ -197,14 +197,19 @@ public class AuthService {
             }
 
             userService.getOrCreateUser(
-                    data.get("first_name") + (data.get("last_name") != null ? " " + data.get("last_name") : ""),
+                    data.get("username"),
                     "https://t.me/" + data.get("username"),
                     Long.parseLong(data.get("id")),
                     data
             );
 
+            String token = jwtService.generateTokenWithAppId(data.get("id"));
+
             return ResponseEntity.ok(Map.of(
                     "status", "ok",
+                    "token", token,
+                    "mode", "tg",
+                    "username", data.get("username"),
                     "user", data
             ));
 

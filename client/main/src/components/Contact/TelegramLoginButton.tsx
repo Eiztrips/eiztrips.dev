@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect } from "react";
+import Cookies from "js-cookie";
 
 export const TelegramLoginButton = () => {
     useEffect(() => {
@@ -24,6 +25,33 @@ export const TelegramLoginButton = () => {
                 .then(r => r.json())
                 .then(data => {
                     console.log("Auth success:", data);
+                    Cookies.set(
+                        "jwt",
+                        data.token,
+                        {
+                            expires: 1,
+                            secure: true,
+                            sameSite: "strict"
+                        }
+                    );
+                    Cookies.set(
+                        "username",
+                        data.username,
+                        {
+                            expires: 1,
+                            secure: true,
+                            sameSite: "strict"
+                        }
+                    )
+                    Cookies.set(
+                        "mode",
+                        data.mode,
+                        {
+                            expires: 1,
+                            secure: true,
+                            sameSite: "strict"
+                        }
+                    )
                     window.closed
                 })
                 .catch(err => console.error("Auth error:", err));
