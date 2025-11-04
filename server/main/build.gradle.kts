@@ -37,6 +37,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter")
 
+    implementation("org.springframework.kafka:spring-kafka")
+
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
 
     compileOnly("org.projectlombok:lombok")

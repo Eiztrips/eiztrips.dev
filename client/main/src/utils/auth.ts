@@ -1,5 +1,5 @@
 
-const base = import.meta?.env?.VITE_DEFAULT_API_URL || 'http://localhost:8080';
+const base = import.meta?.env?.VITE_DEFAULT_API_URL || 'http://localhost:8080/api';
 
 export const checkAuthToken = async (): Promise<boolean> => {
     try {
@@ -21,3 +21,8 @@ export const checkAuthToken = async (): Promise<boolean> => {
 export const getVKAuthUrl = (): string => {
     return `${base}/v1/auth/vk`;
 };
+
+export const getTelegramAuthUrl = (): string => {
+    return `${base}/v1/auth/tg`;
+};
+

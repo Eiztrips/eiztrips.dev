@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import './Contact.scss';
 import { useI18n } from '../../i18n/i18n';
-import { checkAuthToken, getVKAuthUrl } from '../../utils/auth';
-import {TelegramLoginButton} from "./TelegramLoginButton.tsx";
+import { checkAuthToken, getVKAuthUrl, getTelegramAuthUrl } from '../../utils/auth';
 
 const Contact: React.FC = () => {
     const { t } = useI18n();
@@ -28,9 +27,7 @@ const Contact: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Simulate form submission
         try {
-            // Here you would normally send the form data to your backend
             console.log('Form submitted:', formData);
             setStatus('success');
             setFormData({ name: '', email: '', message: '' });
@@ -51,6 +48,10 @@ const Contact: React.FC = () => {
 
     const handleVKLogin = () => {
         window.location.href = getVKAuthUrl();
+    };
+
+    const handleTelegramLogin = () => {
+        window.location.href = getTelegramAuthUrl();
     };
 
     return (
@@ -211,7 +212,17 @@ const Contact: React.FC = () => {
                                     <span className="btn-icon">🔵</span>
                                     Войти через ВКонтакте
                                 </motion.button>
-                                <TelegramLoginButton />
+
+                                <motion.button
+                                    type="button"
+                                    className="btn btn-telegram"
+                                    onClick={handleTelegramLogin}
+                                    whileHover={{ scale: 1.05, y: -2 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    <span className="btn-icon">✈️</span>
+                                    Войти через Telegram
+                                </motion.button>
                             </div>
                         </motion.div>
                     )}

@@ -35,7 +35,6 @@ const Callback: React.FC = () => {
             navigate("/");
         }
     }, [searchParams, navigate]);
-
     return <p>Авторизация... подождите</p>;
 };
 

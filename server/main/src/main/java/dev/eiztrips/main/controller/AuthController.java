@@ -24,17 +24,17 @@ public class AuthController {
         return new RedirectView(url);
     }
 
-    @GetMapping("/vk/callback")
+    @PostMapping("/vk/callback")
     public RedirectView handleVkCallback(@RequestParam String code, @RequestParam String state, @RequestParam String device_id) {
         String url = authService.handleVkCallback(Map.of("code", code, "state", state, "device_id", device_id));
         return new RedirectView(url);
     }
 
-    @PostMapping("/tg/callback")
-    public ResponseEntity<?> telegramAuth(@RequestBody Map<String, String> data) {
-        return authService.handleTgCallback(data);
+    @GetMapping("/tg")
+    public RedirectView redirectToTg() {
+        String url = authService.TgAuthRedirect();
+        return new RedirectView(url);
     }
-
 
     @GetMapping("/verify")
     public ResponseEntity<String> verifyToken(@CookieValue(value = "jwt", required = false) String token) {
