@@ -1,0 +1,122 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: eiztrips_postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: api_main_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d api_main_db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - eiztrips_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: eiztrips_redis
+    environment:
+      - REDIS_PASSWORD=secret_password
+    command: [ "redis-server", "--requirepass", "secret_password" ]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - eiztrips_network
+
+  kafka:
+    image: apache/kafka:latest
+    container_name: eiztrips_kafka
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_NUM_PARTITIONS: 3
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    healthcheck:
+      test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    networks:
+      - eiztrips_network
+
+  main-service:
+    build:
+      context: ./main
+      dockerfile: Dockerfile
+    container_name: eiztrips_main_service
+    environment:
+      - SPRING_PROFILES_ACTIVE=local
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/api_main_db
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+      - SPRING_DATA_REDIS_PASSWORD=secret_password
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SPRING_DEVTOOLS_RESTART_ENABLED=true
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./main:/app:delegated
+      - gradle_cache:/root/.gradle
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - eiztrips_network
+    restart: unless-stopped
+
+  telegram-bot:
+    build:
+      context: ./telegram-bot
+      dockerfile: Dockerfile
+    container_name: eiztrips_telegram_bot
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_TELEGRAM_BOT_TOPIC=telegram-bot
+      - KAFKA_TELEGRAM_BOT_RESPONSE_TOPIC=telegram-bot-response
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./telegram-bot:/app:delegated
+    depends_on:
+      kafka:
+        condition: service_healthy
+    networks:
+      - eiztrips_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  kafka_data:
+  gradle_cache:
+
+networks:
+  eiztrips_network:
+    driver: bridge
