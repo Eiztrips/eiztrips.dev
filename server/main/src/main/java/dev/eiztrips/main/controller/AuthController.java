@@ -36,7 +36,7 @@ public class AuthController {
         return new RedirectView(url);
     }
 
-    @PostMapping("/tg/callback")
+    @GetMapping("/tg/callback")
     public RedirectView handleTgCallback(@RequestParam String state) {
         String url = authService.handleTgCallback(state);
         return new RedirectView(url);
