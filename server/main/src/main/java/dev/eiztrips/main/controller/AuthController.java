@@ -24,7 +24,7 @@ public class AuthController {
         return new RedirectView(url);
     }
 
-    @PostMapping("/vk/callback")
+    @GetMapping("/vk/callback")
     public RedirectView handleVkCallback(@RequestParam String code, @RequestParam String state, @RequestParam String device_id) {
         String url = authService.handleVkCallback(Map.of("code", code, "state", state, "device_id", device_id));
         return new RedirectView(url);
