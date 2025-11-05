@@ -45,6 +45,7 @@
     "email": "Email",
     "telegram": "Telegram",
     "github": "GitHub",
+    "discord": "Discord",
     "form": {
       "name": "Имя",
       "email": "Email",

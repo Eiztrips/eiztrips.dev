@@ -32,15 +32,21 @@ public class AuthController {
 
     @GetMapping("/tg")
     public RedirectView redirectToTg() {
-        String url = authService.TgAuthRedirect();
+        String url = authService.tgAuthRedirect();
+        return new RedirectView(url);
+    }
+
+    @PostMapping("/tg/callback")
+    public RedirectView handleTgCallback(@RequestParam String state) {
+        String url = authService.handleTgCallback(state);
         return new RedirectView(url);
     }
 
     @GetMapping("/verify")
     public ResponseEntity<String> verifyToken(@CookieValue(value = "jwt", required = false) String token) {
-        if (token == null || token.isBlank()) {
+        if (token == null || token.isBlank())
             return ResponseEntity.status(401).body("Token is missing");
-        }
+
 
         return jwtService.isTokenValid(token) ?
                 ResponseEntity.ok("Token is valid"): ResponseEntity.status(401).body("Token is invalid");

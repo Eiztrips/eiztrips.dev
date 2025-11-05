@@ -7,18 +7,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
+    private final KafkaProducerService kafkaProducerService;
     private final RedisService redisService;
     private final UserService userService;
     private final JwtService jwtService;
@@ -34,6 +37,9 @@ public class AuthService {
 
     @Value("${tg.bot.username}")
     private String BOT_USERNAME;
+
+    @Value("${admin.tg.id}")
+    private String ADMIN_ID;
 
     // ----------------- VK AUTH -----------------
     public String VkAuthRedirect() {
@@ -118,6 +124,11 @@ public class AuthService {
 
         redisService.removeState(state);
 
+        sendTgMessage(ADMIN_ID, "Авторизация пользователя "
+                + redisData.get("first_name") + " " + redisData.get("last_name") + "\n"
+                + "url: " + "https://vk.com/id" + redisData.get("user_id")
+        );
+
         return defaultClientUrl + "/auth/success?token=" + jwtToken + "&mode=vk" + "&username=" + redisData.get("first_name");
     }
 
@@ -161,10 +172,79 @@ public class AuthService {
         return result;
     }
 
-    // ----------------- TG CALLBACK -----------------
-    public String TgAuthRedirect() {
+    // ----------------- TG AUTH -----------------
+    public String tgAuthRedirect() {
         String state = generateState();
         redisService.saveState(state, Map.of("state", state));
         return "https://t.me/" + BOT_USERNAME + "?start=" + state;
+    }
+
+    public String handleTgCallback(String state) {
+        if (redisService.getState(state).get("state") == null || !Objects.equals(redisService.getState(state).get("state"), state))
+            throw new IllegalArgumentException("Invalid state parameter");
+
+        Map<String, String> userData = redisService.getState(state);
+
+        String jwt = jwtService.generateTokenWithAppId(userData.get("id"));
+
+        sendTgMessage(ADMIN_ID, "Авторизация пользователя "
+                + userData.get("username") + "\n"
+                + "url: " + "https://t.me/id" + userData.get("id")
+        );
+
+        return defaultClientUrl
+                + "/auth/success?token=" + jwt
+                + "&mode=tg"
+                + "&username=" + userData.get("username");
+    }
+
+    @KafkaListener(topics = "telegram-bot", groupId = "main-service-consumer-group")
+    public void tgServiceConsume(Map<String, Object> message) {
+        String state = message.get("state").toString();
+
+        if (redisService.getState(state).get("state") == null || !Objects.equals(redisService.getState(state).get("state"), state)) {
+            log.warn("Недействительный или истекший state: {}", state);
+            kafkaProducerService.sendMessage("telegram-bot-response", Map.of(
+                    "chat_id", (( Map<String, Object> ) message.get("user_info")).get("id").toString(),
+                    "message", "Ссылка для аутентификации недействительна или истекла. Пожалуйста, попробуйте снова."
+            ));
+            return;
+        }
+
+        Map<String, String> userDataMap = (( Map<String, Object> ) message.get("user_info"))
+                .entrySet()
+                .stream()
+                .filter(e -> e.getKey() != null && e.getValue() != null)
+                .collect(java.util.stream.Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> e.getValue().toString()
+                ));
+
+        String userId = userDataMap.get("id");
+        String username = userDataMap.get("username");
+
+        userService.getOrCreateUser(
+                username,
+                "https://t.me/" + username,
+                Long.parseLong(userId),
+                userDataMap
+        );
+
+        redisService.addState(state, userDataMap);
+
+        String botMessage= "Успешная аутентификация!\n\n" +
+                "Ваш аккаунт @" + username + " был успешно привязан к нашему сервису.\n\n" +
+                "Что бы завершить регистрацию, перейдите по ссылке: "
+                + defaultApiUrl + "/v1/auth/tg/callback?state=" + state;
+
+        sendTgMessage(userId, botMessage);
+    }
+
+    // ------------------ TG SERVICE METHODS -------------------
+    public void sendTgMessage(String chatId, String message) {
+        kafkaProducerService.sendMessage("telegram-bot-response", Map.of(
+                "chat_id", chatId,
+                "message", message
+        ));
     }
 }

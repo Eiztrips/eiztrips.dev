@@ -23,6 +23,8 @@ const Skills: React.FC = () => {
         { name: 'Hibernate', category: 'Java' },
         { name: 'JUnit', category: 'Java' },
         { name: 'Gradle', category: 'Java' },
+        { name: 'Redis', category: 'Java' },
+        { name: 'Kafka', category: 'Java' },
 
         { name: 'Docker', category: 'DevOps' },
         { name: 'Linux', category: 'DevOps' },
